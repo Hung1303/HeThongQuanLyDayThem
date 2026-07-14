@@ -1,11 +1,6 @@
 ﻿using BusinessObjects;
 using Core.Base;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Context
 {
@@ -34,7 +29,7 @@ namespace Repositories.Context
                 b.Property(x => x.Username).HasMaxLength(256).IsRequired();
                 b.Property(x => x.Email).HasMaxLength(256).IsRequired();
                 b.Property(x => x.Fullname).HasMaxLength(256).IsRequired();
-                
+
             });
 
             modelBuilder.Entity<CenterProfile>(b =>
@@ -48,14 +43,14 @@ namespace Repositories.Context
 
             modelBuilder.Entity<TeacherProfile>(b =>
             {
-               
+
             });
 
             modelBuilder.Entity<Course>(b =>
             {
                 b.Property(x => x.ClassName).HasMaxLength(256).IsRequired();
                 b.Property(x => x.Subject).HasMaxLength(256).IsRequired();
-                b.Property(x => x.TuitionFee).HasPrecision(18,2);
+                b.Property(x => x.TuitionFee).HasPrecision(18, 2);
             });
 
             var now = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);

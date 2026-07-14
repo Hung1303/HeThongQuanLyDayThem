@@ -1,15 +1,10 @@
 ﻿using Core.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObjects
 {
     public class CenterProfile : BaseEntity
     {
-        public string CenterName { get;set; }
+        public string CenterName { get; set; }
         public string Address { get; set; }
         public DateTime EstablishDate { get; set; }
         public string? OwnerName { get; set; }

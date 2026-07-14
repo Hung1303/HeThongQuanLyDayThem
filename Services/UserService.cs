@@ -4,13 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 using Services.DTO;
 using Services.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Services
 {
@@ -72,8 +67,8 @@ namespace Services
                 UserId = user.Id,
             };
 
-            try 
-            { 
+            try
+            {
                 _unitOfWork.BeginTransaction();
                 await _unitOfWork.GetRepository<User>().InsertAsync(user);
                 await _unitOfWork.GetRepository<CenterProfile>().InsertAsync(center);
@@ -113,7 +108,7 @@ namespace Services
             }
 
             var checkCenter = await _unitOfWork.GetRepository<CenterProfile>().Entities.FirstOrDefaultAsync(c => c.UserId == userId);
-            if(checkCenter == null)
+            if (checkCenter == null)
             {
                 throw new Exception("Center not found.");
             }
@@ -277,7 +272,7 @@ namespace Services
             var checkCenter = await _unitOfWork.GetRepository<CenterProfile>().Entities
                 .Include(u => u.User)
                 .FirstOrDefaultAsync(c => c.Id == centerId && !c.User.IsDeleted);
-            if(checkCenter == null)
+            if (checkCenter == null)
             {
                 throw new Exception("Center not found.");
             }
@@ -319,7 +314,7 @@ namespace Services
 
         public async Task<CenterUserResponse> GetCenterByUserId(Guid UserId)
         {
-            var center =  _unitOfWork.GetRepository<CenterProfile>().Entities
+            var center = _unitOfWork.GetRepository<CenterProfile>().Entities
                 .Include(u => u.User)
                 .Where(c => c.UserId == UserId && !c.User.IsDeleted)
                 .Select(u => new CenterUserResponse

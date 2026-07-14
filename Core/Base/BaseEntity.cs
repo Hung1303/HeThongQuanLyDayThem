@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Base
 {
@@ -17,7 +12,8 @@ namespace Core.Base
         [DefaultValue(false)]
         public bool IsDeleted { get; set; }
 
-        protected BaseEntity(){
+        protected BaseEntity()
+        {
             Id = Guid.NewGuid();
             CreatedAt = DateTime.UtcNow;
             LastUpdatedAt = DateTime.UtcNow;

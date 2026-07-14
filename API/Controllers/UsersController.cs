@@ -1,5 +1,4 @@
 ﻿using Core.Base;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTO;
 using Services.Interfaces;
@@ -18,7 +17,7 @@ namespace API.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] int pageNumber =1, [FromQuery] int pageSize = 5, [FromQuery] string? fullName = null, [FromQuery] string? role = null, AccountStatus? status = null)
+        public async Task<IActionResult> GetAllUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5, [FromQuery] string? fullName = null, [FromQuery] string? role = null, AccountStatus? status = null)
         {
             var (users, totalCount) = await _userService.GetAllUsers(pageNumber, pageSize, fullName, role, status);
             return Ok(new { users, totalCount });
@@ -45,7 +44,8 @@ namespace API.Controllers
             {
                 var center = await _userService.GetCenterByUserId(UserId);
                 return Ok(center);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -74,7 +74,7 @@ namespace API.Controllers
                 var center = await _userService.AddNewCenterAccount(request);
                 return Ok(center);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -101,7 +101,8 @@ namespace API.Controllers
             {
                 var user = await _userService.UpdateAccountStatus(userId, status);
                 return Ok(user);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -114,7 +115,8 @@ namespace API.Controllers
             {
                 var center = await _userService.UpdateCenterInformation(userId, request);
                 return Ok(center);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
