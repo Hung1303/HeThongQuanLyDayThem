@@ -1,4 +1,5 @@
 ﻿using BusinessObjects;
+using Core.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,27 @@ namespace Repositories.Context
                 b.Property(x => x.Subject).HasMaxLength(256).IsRequired();
                 b.Property(x => x.TuitionFee).HasPrecision(18,2);
             });
+
+            var now = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    CreatedAt = now,
+                    LastUpdatedAt = now,
+                    IsDeleted = false,
+                    Email = "tuanhung01032003@gmail.com",
+                    Password = "123456",
+                    Fullname = "Đỗ Tuấn Hùng",
+                    PhoneNumber = "0932760162",
+                    DateOfBirth = new DateTime(2003, 3, 1, 0, 0, 0, DateTimeKind.Utc),
+                    Gender = Gender.Male,
+                    UserRole = Role.Admin,
+                    AccountStatus = AccountStatus.Active,
+                    Username = "tuanhung0103"
+                }
+            );
         }
     }
 }

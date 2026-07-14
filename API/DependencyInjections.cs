@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Repositories;
 using Repositories.Context;
+using Repositories.Interfaces;
+using Services;
+using Services.Interfaces;
 
 namespace API
 {
@@ -12,6 +16,10 @@ namespace API
                 var connectionString = configuration.GetConnectionString("DefaultConnectionString");
                 options.UseNpgsql(connectionString);
             });
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }
