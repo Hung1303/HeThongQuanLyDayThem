@@ -14,5 +14,7 @@ namespace Services.Interfaces
         Task<CreateTeacherRequest> AddNewTeacherAccount(CreateTeacherRequest request, Guid userId);
         Task<string> UpdateAccountStatus(Guid userId, int status);
         Task<CenterUserResponse> UpdateCenterInformation(Guid userId, CenterUpdateRequest request);
+        Task<TeacherDetailResponse> UpdateTeacherInformation(Guid userId, TeacherUpdateRequest request);
+        Task<string> DeleteUser(Guid userId);
     }
 }

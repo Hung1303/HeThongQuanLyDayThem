@@ -14,5 +14,7 @@ namespace BusinessObjects
         public Role UserRole { get; set; }
         public AccountStatus AccountStatus { get; set; } = 0;
 
+        public virtual TeacherProfile? TeacherProfile { get; set; }
+        public virtual CenterProfile? CenterProfile { get; set; }
     }
 }

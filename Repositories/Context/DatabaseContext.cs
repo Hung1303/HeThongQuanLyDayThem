@@ -29,7 +29,14 @@ namespace Repositories.Context
                 b.Property(x => x.Username).HasMaxLength(256).IsRequired();
                 b.Property(x => x.Email).HasMaxLength(256).IsRequired();
                 b.Property(x => x.Fullname).HasMaxLength(256).IsRequired();
+                
+                b.HasOne(u => u.TeacherProfile)
+                    .WithOne(tp => tp.User)
+                    .HasForeignKey<TeacherProfile>(tp => tp.UserId);
 
+                b.HasOne(u => u.CenterProfile)
+                    .WithOne(cp => cp.User)
+                    .HasForeignKey<CenterProfile>(cp => cp.UserId);
             });
 
             modelBuilder.Entity<CenterProfile>(b =>
@@ -39,11 +46,19 @@ namespace Repositories.Context
                 b.Property(x => x.Address).HasMaxLength(256);
                 b.Property(x => x.ContactPhoneNumber).HasMaxLength(256).IsRequired();
                 b.Property(x => x.ContactEmail).HasMaxLength(256).IsRequired();
+
+                b.HasIndex(x => x.UserId)
+                    .IsUnique();
             });
 
             modelBuilder.Entity<TeacherProfile>(b =>
             {
+                b.HasIndex(x => x.UserId)
+                   .IsUnique();
 
+                b.HasOne(tp => tp.CenterProfile)
+                    .WithMany(cp => cp.TeacherProfiles)
+                    .HasForeignKey(tp => tp.CenterProfileId);
             });
 
             modelBuilder.Entity<Course>(b =>
@@ -51,6 +66,24 @@ namespace Repositories.Context
                 b.Property(x => x.ClassName).HasMaxLength(256).IsRequired();
                 b.Property(x => x.Subject).HasMaxLength(256).IsRequired();
                 b.Property(x => x.TuitionFee).HasPrecision(18, 2);
+
+                // Course -> TeacherProfile (Many-to-One)
+                b.HasOne(c => c.TeacherProfile)
+                       .WithMany(t => t.Courses)
+                       .HasForeignKey(c => c.TeacherProfileId)
+                       .OnDelete(DeleteBehavior.Restrict);
+
+                // Course -> CenterProfile (Many-to-One)
+                b.HasOne(c => c.CenterProfile)
+                       .WithMany(cp => cp.Courses)
+                       .HasForeignKey(c => c.CenterProfileId)
+                       .OnDelete(DeleteBehavior.Restrict);
+
+                b.HasIndex(c => c.TeacherProfileId);
+                b.HasIndex(c => c.CenterProfileId);
+                b.HasIndex(c => c.Subject);
+                b.HasIndex(c => c.ClassStatus);
+                b.HasIndex(c => new { c.Grade, c.Subject });
             });
 
             var now = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);

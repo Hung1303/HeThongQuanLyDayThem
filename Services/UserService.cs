@@ -122,7 +122,7 @@ namespace Services
                 Gender = request.Gender,
                 DateOfBirth = request.DateOfBirth,
                 PhoneNumber = request.PhoneNumber,
-                UserRole = Role.Center,
+                UserRole = Role.Teacher,
                 AccountStatus = AccountStatus.Pending
             };
 
@@ -447,6 +447,73 @@ namespace Services
             await _unitOfWork.SaveAsync();
 
             return await GetCenterByUserId(userId);
+        }
+
+        public async Task<TeacherDetailResponse> UpdateTeacherInformation(Guid userId, TeacherUpdateRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            var teacher = await _unitOfWork.GetRepository<User>().Entities
+                .Include(t => t.TeacherProfile)
+                .FirstOrDefaultAsync(t => t.Id == userId && !t.IsDeleted);
+
+            if (teacher == null) throw new Exception("User not found.");
+
+            bool emailExists = await _unitOfWork.GetRepository<User>().Entities
+                .AnyAsync(u =>
+                    !u.IsDeleted &&
+                    u.Id != userId &&
+                    u.Email == request.Email);
+
+            bool emailUsedAsContact = await _unitOfWork.GetRepository<CenterProfile>().Entities
+                .AnyAsync(c =>
+                    !c.IsDeleted &&
+                    c.UserId != userId &&
+                    c.ContactEmail == request.Email);
+
+            if (emailExists || emailUsedAsContact)
+                throw new InvalidOperationException("This email is already being used by another user.");
+
+            bool phoneExists = await _unitOfWork.GetRepository<User>().Entities
+                .AnyAsync(u =>
+                    !u.IsDeleted &&
+                    u.Id != userId &&
+                    u.PhoneNumber == request.PhoneNumber);
+
+            bool phoneUsedAsContact = await _unitOfWork.GetRepository<CenterProfile>().Entities
+                .AnyAsync(c =>
+                    !c.IsDeleted &&
+                    c.UserId != userId &&
+                    c.ContactPhoneNumber == request.PhoneNumber);
+
+            if (phoneExists || phoneUsedAsContact)
+                throw new InvalidOperationException("This phone number is already being used by another user.");
+
+
+            teacher.Email = request.Email.Trim().ToLowerInvariant();
+            teacher.Fullname = request.Fullname;
+            teacher.PhoneNumber = request.PhoneNumber;
+            teacher.Gender = request.Gender;
+            teacher.TeacherProfile.YearOfExperience = request.YearOfExperience;
+            teacher.TeacherProfile.Qualification = request.Qualification;
+
+            await _unitOfWork.GetRepository<User>().UpdateAsync(teacher);
+            await _unitOfWork.SaveAsync();
+
+            return await GetTeacherByUserId(userId);
+        }
+
+        public async Task<string> DeleteUser(Guid userId)
+        {
+            var user = await _unitOfWork.GetRepository<User>().Entities.FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
+            if (user == null) throw new Exception("User not found.");
+
+            user.IsDeleted = true;
+
+            await _unitOfWork.GetRepository<User>().UpdateAsync(user);
+            await _unitOfWork.SaveAsync();
+
+            return "This user has been deleted.";
         }
     }
 }

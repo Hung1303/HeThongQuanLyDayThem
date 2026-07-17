@@ -86,4 +86,14 @@ namespace Services.DTO
         public string? ContactPhoneNumber { get; set; }
         public string? ContactEmail { get; set; }
     }
+
+    public class TeacherUpdateRequest
+    {
+        public string Email { get; set; }
+        public string Fullname { get; set; }
+        public string? PhoneNumber { get; set; }
+        public Gender Gender { get; set; }
+        public int YearOfExperience { get; set; }
+        public Degree Qualification { get; set; }
+    }
 }

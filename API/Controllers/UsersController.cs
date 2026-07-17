@@ -118,7 +118,34 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("UpdateTeacher/{userId}")]
+        public async Task<IActionResult> UpdateTeacher(Guid userId, TeacherUpdateRequest request)
+        {
+            try
+            {
+                var center = await _userService.UpdateTeacherInformation(userId, request);
+                return Ok(center);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteUser(Guid userId)
+        {
+            try
+            {
+                var user = await _userService.DeleteUser(userId);
+                return Ok(user);
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
     }
