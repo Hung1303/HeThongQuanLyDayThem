@@ -208,6 +208,9 @@ namespace Services
                 .Select(u => new UserDetailResponse
                 {
                     Id = u.Id,
+                    ProfileId = u.TeacherProfile != null ? u.TeacherProfile.Id :
+                                u.CenterProfile != null ? u.CenterProfile.Id :
+                                null,
                     Username = u.Username,
                     Email = u.Email,
                     Password = u.Password,
@@ -514,6 +517,16 @@ namespace Services
             await _unitOfWork.SaveAsync();
 
             return "This user has been deleted.";
+        }
+
+        public Task<(IEnumerable<TeacherDetailResponse> Teachers, int TotalCount)> GetAllTeachers(int pageNumber, int pageSize, string? fullName, AccountStatus? status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User?> Login(string email, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

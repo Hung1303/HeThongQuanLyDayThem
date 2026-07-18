@@ -26,7 +26,9 @@
         Pending = 0,
         OpenForAdmission = 1,
         AdmissionCompleted = 2,
-        Cancelled = 4
+        Completed = 3,
+        Hidden = 4,
+        Rejected = 5
     }
 
     public enum TeachingMethod

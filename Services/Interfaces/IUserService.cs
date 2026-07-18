@@ -1,4 +1,5 @@
-﻿using Core.Base;
+﻿using BusinessObjects;
+using Core.Base;
 using Services.DTO;
 
 namespace Services.Interfaces
@@ -7,6 +8,7 @@ namespace Services.Interfaces
     {
         Task<(IEnumerable<UserDetailResponse> Users, int TotalCount)> GetAllUsers(int pageNumber, int pageSize, string? fullName, string? role, AccountStatus? status);
         Task<(IEnumerable<CenterUserResponse> Centers, int TotalCount)> GetAllCenters(int pageNumber, int pageSize, string? centerName, string? address, AccountStatus? status);
+        Task<(IEnumerable<TeacherDetailResponse> Teachers, int TotalCount)> GetAllTeachers(int pageNumber, int pageSize, string? fullName, AccountStatus? status);
         Task<(IEnumerable<TeacherDetailResponse> Teachers, int TotalCount)> GetTeachersByCenter(Guid centerId, int pageNumber, int pageSize, string? fullName, AccountStatus? status);
         Task<CenterUserResponse> GetCenterByUserId(Guid UserId);
         Task<TeacherDetailResponse> GetTeacherByUserId(Guid UserId);
@@ -16,5 +18,6 @@ namespace Services.Interfaces
         Task<CenterUserResponse> UpdateCenterInformation(Guid userId, CenterUpdateRequest request);
         Task<TeacherDetailResponse> UpdateTeacherInformation(Guid userId, TeacherUpdateRequest request);
         Task<string> DeleteUser(Guid userId);
+        Task<User?> Login(string email, string password);
     }
 }

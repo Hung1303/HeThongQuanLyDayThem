@@ -14,6 +14,7 @@ namespace BusinessObjects
         public decimal TuitionFee { get; set; }
         public ClassStatus ClassStatus { get; set; } = 0;
 
+
         public Guid TeacherProfileId { get; set; }
         public virtual TeacherProfile TeacherProfile { get; set; }
         public Guid CenterProfileId { get; set; }
