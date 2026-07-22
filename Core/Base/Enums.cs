@@ -24,9 +24,9 @@
     public enum ClassStatus
     {
         Pending = 0,
-        OpenForAdmission = 1,
-        AdmissionCompleted = 2,
-        Completed = 3,
+        OpenForEnrollment = 1,
+        ClassStartedButStilOpenForEnrollment = 2,
+        EnrollmentClosed = 3,
         Hidden = 4,
         Rejected = 5
     }

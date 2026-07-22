@@ -14,6 +14,7 @@ namespace Repositories.Context
         public DbSet<CenterProfile> CenterProfiles { get; set; }
         public DbSet<TeacherProfile> TeacherProfiles { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Token> Tokens { get; set; }
         protected DatabaseContext()
         {
         }
@@ -29,7 +30,7 @@ namespace Repositories.Context
                 b.Property(x => x.Username).HasMaxLength(256).IsRequired();
                 b.Property(x => x.Email).HasMaxLength(256).IsRequired();
                 b.Property(x => x.Fullname).HasMaxLength(256).IsRequired();
-                
+
                 b.HasOne(u => u.TeacherProfile)
                     .WithOne(tp => tp.User)
                     .HasForeignKey<TeacherProfile>(tp => tp.UserId);

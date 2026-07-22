@@ -18,6 +18,6 @@ namespace Services.Interfaces
         Task<CenterUserResponse> UpdateCenterInformation(Guid userId, CenterUpdateRequest request);
         Task<TeacherDetailResponse> UpdateTeacherInformation(Guid userId, TeacherUpdateRequest request);
         Task<string> DeleteUser(Guid userId);
-        Task<User?> Login(string email, string password);
+        Task<User?> Login(string username);
     }
 }

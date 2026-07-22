@@ -519,14 +519,47 @@ namespace Services
             return "This user has been deleted.";
         }
 
-        public Task<(IEnumerable<TeacherDetailResponse> Teachers, int TotalCount)> GetAllTeachers(int pageNumber, int pageSize, string? fullName, AccountStatus? status)
+        public async Task<(IEnumerable<TeacherDetailResponse> Teachers, int TotalCount)> GetAllTeachers(int pageNumber, int pageSize, string? fullName, AccountStatus? status)
         {
-            throw new NotImplementedException();
+            IQueryable<TeacherProfile> query = _unitOfWork.GetRepository<TeacherProfile>().Entities
+                .Include(u => u.User)
+                .Where(q => !q.IsDeleted);
+
+            if (!string.IsNullOrWhiteSpace(fullName))
+            {
+                query = query.Where(u => EF.Functions.Like(u.User.Fullname, $"%{fullName}%"));
+            }
+
+            if (status.HasValue)
+            {
+                query = query.Where(x => x.User.AccountStatus == status);
+            }
+
+            int totalCount = await query.CountAsync();
+
+            var users = await query
+                .OrderByDescending(u => u.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(u => new TeacherDetailResponse
+                {
+                    Id = u.Id,
+                    UId = u.User.Id,
+                    Fullname = u.User.Fullname,
+                    BirthYear = u.User.DateOfBirth.Year.ToString(),
+                    Gender = u.User.Gender.ToString(),
+                    YearOfExperience = u.YearOfExperience,
+                    Qualification = u.Qualification.ToString(),
+                    Status = u.User.AccountStatus.ToString()
+
+                }).ToListAsync();
+
+            return (users, totalCount);
         }
 
-        public Task<User?> Login(string email, string password)
+        public async Task<User?> Login(string username)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.GetRepository<User>().Entities.FirstOrDefaultAsync(t => t.Username == username && !t.IsDeleted);
         }
     }
 }

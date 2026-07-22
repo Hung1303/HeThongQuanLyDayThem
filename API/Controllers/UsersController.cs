@@ -30,6 +30,13 @@ namespace API.Controllers
             return Ok(new { centers, totalCount });
         }
 
+        [HttpGet("Teachers")]
+        public async Task<IActionResult> GetAllTeachers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5, [FromQuery] string? fullName = null, AccountStatus? status = null)
+        {
+            var (teachers, totalCount) = await _userService.GetAllTeachers(pageNumber, pageSize, fullName, status);
+            return Ok(new { teachers, totalCount });
+        }
+
         [HttpGet("Teachers/{centerId}")]
         public async Task<IActionResult> GetTeachersByCenterId(Guid centerId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 5, [FromQuery] string? fullName = null, AccountStatus? status = null)
         {
@@ -143,7 +150,8 @@ namespace API.Controllers
             {
                 var user = await _userService.DeleteUser(userId);
                 return Ok(user);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
